@@ -6,9 +6,10 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Welcome to the Home Page</h1>
-    {% if title %}
-        <h2>{{ title }}</h2>
-    {% endif %}
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.task_name }}</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
