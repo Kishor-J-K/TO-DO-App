@@ -1,15 +1,188 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <title>Django ToDo App</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
-    <ul>
-        {% for task in tasks %}
-            <li>{{ task.task_name }}</li>
-        {% endfor %}
-    </ul>
+
+    <div class="container">
+
+        <!-- Page Title -->
+        <h1 class="page-title">Django ToDo App</h1>
+
+
+        <!-- Main Content -->
+        <div class="main-content">
+
+
+            <!-- LEFT SIDE -->
+            <div class="left-section">
+
+                <div class="day-header">
+                    <h2>My Day</h2>
+
+                    <p>
+                        {% now "d F Y" %}
+                    </p>
+                </div>
+
+
+                <!-- Pending Tasks -->
+                <div class="pending-tasks">
+
+                    <!-- Example Task -->
+                    {%for task in tasks %}
+                    <div class="task">
+
+                        <span class="task-text">
+                            {{ task.task_name }}
+                        </span>
+
+                        <div class="task-actions">
+
+                            <!-- Mark Done -->
+                            <form method="POST">
+                                {% csrf_token %}
+
+                                <input
+                                    type="hidden"
+                                    name="task_id"
+                                    value="1"
+                                >
+
+                                <button
+                                    type="submit"
+                                    name="action"
+                                    value="complete"
+                                    class="btn done-btn"
+                                >
+                                    ✓ Mark as Done
+                                </button>
+
+                            </form>
+
+
+                            <!-- Delete -->
+                            <form method="POST">
+                                {% csrf_token %}
+
+                                <input
+                                    type="hidden"
+                                    name="task_id"
+                                    value="1"
+                                >
+
+                                <button
+                                    type="submit"
+                                    name="action"
+                                    value="delete"
+                                    class="btn delete-btn"
+                                    title="Delete"
+                                >
+                                    🗑
+                                </button>
+
+                            </form>
+
+
+                            <!-- Edit -->
+                            <form method="POST">
+                                {% csrf_token %}
+
+                                <input
+                                    type="hidden"
+                                    name="task_id"
+                                    value="1"
+                                >
+
+                                <button
+                                    type="submit"
+                                    name="action"
+                                    value="edit"
+                                    class="btn edit-btn"
+                                    title="Edit"
+                                >
+                                    ✎
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                    {% endfor %}
+
+
+
+                    <!-- More pending tasks can go here -->
+
+
+                </div>
+
+
+                <!-- Add Task -->
+                <form method="POST" class="add-task">
+
+                    {% csrf_token %}
+
+                    <input
+                        type="text"
+                        name="task"
+                        placeholder="Add a new task..."
+                        required
+                    >
+
+                    <button
+                        type="submit"
+                        name="action"
+                        value="add"
+                        class="add-btn"
+                    >
+                        Add
+                    </button>
+
+                </form>
+
+            </div>
+
+
+
+            <!-- RIGHT SIDE -->
+            <div class="right-section">
+
+                <h2 class="completed-title">
+                    Completed Tasks
+                </h2>
+
+
+                <!-- Completed Task -->
+
+                <div class="completed-task">
+
+                    <span>
+                        This is the completed task.
+                    </span>
+
+                </div>
+
+
+                <!-- More completed tasks can go here -->
+
+            </div>
+
+        </div>
+
+    </div>
+
 </body>
+
 </html>
