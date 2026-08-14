@@ -170,6 +170,9 @@
 
                     <span>
                         {{ completed_task.task_name }}
+                        {% if completed_task.updated_at %}
+                            <small>(Updated: {{ completed_task.updated_at }})</small>
+                        {% endif %}
                     </span>
 
                 </div>
