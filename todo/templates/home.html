@@ -7,184 +7,196 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Django ToDo App</title>
+    <title>TODO LIST - Home</title>
 
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    >
+
+    <!-- Your CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
+
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <!-- Page Title -->
-        <h1 class="page-title">Django ToDo App</h1>
-
-
-        <!-- Main Content -->
-        <div class="main-content">
+    <!-- Title -->
+    <h3 class="page-title">
+        Django ToDo App
+    </h3>
 
 
-            <!-- LEFT SIDE -->
-            <div class="left-section">
+    <div class="row">
 
-                <div class="day-header">
-                    <h2>My Day</h2>
+        <!-- ================= LEFT SIDE ================= -->
 
-                    <p>
-                        {% now "d F Y" %}
-                    </p>
-                </div>
+        <div class="col-md-7">
+
+            <h4>My Day</h4>
+
+            <p class="text-muted">
+                {% now "jS F Y" %}
+            </p>
 
 
-                <!-- Pending Tasks -->
-                <div class="pending-tasks">
+            <!-- Pending Tasks -->
 
-                    <!-- Example Task -->
-                    {%for task in tasks %}
-                    <div class="task">
+            <div class="task-list">
 
-                        <span class="task-text">
+                {% for task in tasks %}
+
+                <div class="card task-card">
+
+                    <div class="card-body">
+
+                        <span class="task-name">
                             {{ task.task_name }}
                         </span>
 
-                        <div class="task-actions">
 
-                            <!-- Mark Done -->
-                            <form method="POST">
-                                {% csrf_token %}
+                        <span class="task-buttons">
 
-                                <input
-                                    type="hidden"
-                                    name="task_id"
-                                    value="1"
-                                >
-
-                                <button
-                                    type="submit"
-                                    name="action"
-                                    value="complete"
-                                    class="btn done-btn"
-                                >
-                                    ✓ Mark as Done
-                                </button>
-
-                            </form>
+                            <!-- Mark as Done -->
+                            <a
+                                href="{% url 'mark_as_done' task.id %}"
+                                class="btn btn-success"
+                            >
+                                <i class="fa fa-check"></i>
+                                Mark as Done
+                            </a>
 
 
                             <!-- Delete -->
-                            <form method="POST">
-                                {% csrf_token %}
-
-                                <input
-                                    type="hidden"
-                                    name="task_id"
-                                    value="1"
-                                >
-
-                                <button
-                                    type="submit"
-                                    name="action"
-                                    value="delete"
-                                    class="btn delete-btn"
-                                    title="Delete"
-                                >
-                                    🗑
-                                </button>
-
-                            </form>
+                            <a
+                                href="{% url 'delete_task' task.id %}"
+                                class="btn btn-danger"
+                            >
+                                <i class="fa fa-trash"></i>
+                            </a>
 
 
                             <!-- Edit -->
-                            <form method="POST">
-                                {% csrf_token %}
+                            <a
+                                href="{% url 'edit_task' task.id %}"
+                                class="btn btn-primary"
+                            >
+                                <i class="fa fa-pencil"></i>
+                            </a>
 
-                                <input
-                                    type="hidden"
-                                    name="task_id"
-                                    value="1"
-                                >
-
-                                <button
-                                    type="submit"
-                                    name="action"
-                                    value="edit"
-                                    class="btn edit-btn"
-                                    title="Edit"
-                                >
-                                    ✎
-                                </button>
-
-                            </form>
-
-                        </div>
+                        </span>
 
                     </div>
-                    {% endfor %}
-
-
-
-                    <!-- More pending tasks can go here -->
-
 
                 </div>
 
+                {% empty %}
 
-                <!-- Add Task -->
-                <form method="POST" class="add-task">
+                <p class="text-muted text-center mt-5">
+                    No pending tasks.
+                </p>
 
-                    {% csrf_token %}
-
-                    <input
-                        type="text"
-                        name="task"
-                        placeholder="Add a new task..."
-                        required
-                    >
-
-                    <button
-                        type="submit"
-                        name="action"
-                        value="add"
-                        class="add-btn"
-                    >
-                        Add
-                    </button>
-
-                </form>
-
-            </div>
-
-
-
-            <!-- RIGHT SIDE -->
-            <div class="right-section">
-
-                <h2 class="completed-title">
-                    Completed Tasks
-                </h2>
-
-
-                <!-- Completed Task -->
-                {% for completed_task in completed_tasks %}
-                <div class="completed-task">
-
-                    <span>
-                        {{ completed_task.task_name }}
-                        {% if completed_task.updated_at %}
-                            <small>(Updated: {{ completed_task.updated_at }})</small>
-                        {% endif %}
-                    </span>
-
-                </div>
                 {% endfor %}
-
-                <!-- More completed tasks can go here -->
 
             </div>
 
         </div>
 
+
+        <!-- ================= RIGHT SIDE ================= -->
+
+        <div class="col-md-5">
+
+            <h5 class="completed-heading">
+                Completed Tasks
+            </h5>
+
+
+            {% for task in completed_tasks %}
+
+            <div class="card task-card">
+
+                <div class="card-body">
+
+                    <span class="completed-task">
+                        {{ task.task_name }}
+                    </span>
+
+
+                    <span class="task-buttons">
+
+                        <!-- Mark as Undone -->
+                        <a
+                            href="{% url 'mark_as_undone' task.id %}"
+                            class="btn btn-danger"
+                        >
+                            <i class="fa fa-times"></i>
+                            Mark as Undone
+                        </a>
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <p class="text-muted">
+                No completed tasks.
+            </p>
+
+            {% endfor %}
+
+        </div>
+
     </div>
+
+
+    <!-- ================= ADD TASK ================= -->
+
+    <div class="add-task">
+
+        <form
+            action="{% url 'add_task' %}"
+            method="POST"
+        >
+
+            {% csrf_token %}
+        
+            <div class="input-group">
+                
+                <input
+                    type="text"
+                    name="task_name"
+                    class="form-control"
+                    placeholder="Add a task"
+                >
+
+                <button
+                    type="submit"
+                    class="btn btn-primary add-button"
+                >
+                    <i class="fa fa-plus"></i>
+                    Add
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 </body>
 
