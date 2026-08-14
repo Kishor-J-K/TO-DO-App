@@ -165,15 +165,15 @@
 
 
                 <!-- Completed Task -->
-
+                {% for completed_task in completed_tasks %}
                 <div class="completed-task">
 
                     <span>
-                        This is the completed task.
+                        {{ completed_task.task_name }}
                     </span>
 
                 </div>
-
+                {% endfor %}
 
                 <!-- More completed tasks can go here -->
 
